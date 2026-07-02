@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contacto - FoodCan</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><path fill='%23FF9800' d='M226.5 92.9c14.3 7.3 22.8 23 21 38.6l-5.3 45.4c-2.6 22.2-22.3 38.2-44.6 36.5l-42.5-3.2c-23.4-1.7-41.2-22-38.3-45.2l6.2-49.4c3.4-27.4 28.5-46.7 55.4-42.7l48.1 7.1zM501.7 274c1.1-23.7-16-44.2-39.6-46.7l-46-4.9c-22.7-2.4-43.1 13.5-46.6 36l-8.2 52.8c-3 19.3 8.3 37.9 26.6 44.5l49 17.6c25.4 9.1 53-8 56.6-35.3l8.2-64zm-143.2-94.8c18-9.4 30.6-26.6 34.6-46.6l9.3-46c4.6-22.9-10-45.7-32.8-51.2l-45.4-11c-24.3-5.9-49.3 7.6-56.7 31l-14.1 44.9c-6.8 21.6 4.7 45.3 26 54l43.2 17.6c11.5 4.7 24.6 1.8 35.9-2.7zM170 286.7c-3.1-22.7-23.7-38.6-46.5-35.9l-45.7 5.4c-23.8 2.8-41.3 23.9-38.4 47.7l8 65.5c3.2 26.1 26.3 44.8 52.4 42l48-5.2c19.6-2.1 34.7-18.4 36-38.1l6.2-81.4zM346.2 313.4c-12.5-23.5-37.3-36.4-63.5-33l-28.7 3.7c-25.1 3.2-46.8 19.9-54 43.6l-14 46.2c-8.9 29.4 6 61.4 34.6 74.3l37.8 17c24.6 11.1 53.6 2.3 68.6-20.7l22.6-34.6c11.5-17.6 12.6-40.4 2.8-59.5l-6.2-37z'/></svg>">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-color: #fdfaf6; 
+            --card-bg: #ffffff;
+            --text-main: #3e3e3e;
+            --text-muted: #86868b;
+            --accent: #FF9800; 
+            --accent-hover: #F57C00;
+            --border-radius: 20px; 
+            --shadow: 0 8px 16px rgba(0, 0, 0, 0.05), 0 2px 4px rgba(0, 0, 0, 0.04);
+            --header-height: 75px;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        img {
+            -webkit-user-drag: none;
+            user-select: none;
+            -moz-user-select: none;
+            -webkit-user-select: none;
+            -ms-user-select: none;
+        }
+
+        .contenedor {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            width: 100%;
+            box-sizing: border-box;
+            flex: 1;
+        }
+
+        header {
+            background-color: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(15px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid #ffe5b4;
+            height: var(--header-height);
+            display: flex;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            width: 100%;
+            height: 100%;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 800;
+            font-size: 1.5rem;
+            color: var(--accent);
+            cursor: pointer;
+            z-index: 2;
+        }
+
+        .logo-icon { font-size: 1.8rem; }
+
+        .header-actions { display: flex; align-items: center; gap: 15px; z-index: 2; margin-left: auto; }
+        .btn-icon { background: none; border: none; font-size: 1.5rem; color: var(--text-main); cursor: pointer; position: relative; transition: transform 0.2s; display: flex; align-items: center; justify-content: center; }
+        .btn-icon:hover { color: var(--accent); transform: scale(1.1); }
+        .btn-icon-fav { color: #ff3b30; }
+
+        .badge {
+            position: absolute; top: -5px; right: -8px; background-color: #ff3b30; color: white;
+            font-size: 0.75rem; font-weight: bold; border-radius: 50%; width: 20px; height: 20px;
+            display: flex; align-items: center; justify-content: center; border: 2px solid white;
+        }
+
+        /* HERO SECTION */
+        .hero {
+            position: relative;
+            width: 100%;
+            min-height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            margin-bottom: 40px;
+            background-color: #FFB74D;
+        }
+
+        .hero-video {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            object-fit: cover; z-index: 1; filter: brightness(0.65);
+        }
+
+        .hero-content {
+            position: relative; z-index: 2; text-align: center; color: white;
+            padding: 20px; width: 100%; max-width: 900px; text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .hero-title { font-size: 3.5rem; margin: 0; line-height: 1.1; font-weight: 800; letter-spacing: 1px; }
+        .hero-subtitle { font-size: 1.2rem; margin: 10px 0 0; font-weight: 400; letter-spacing: 0.5px; }
+
+        /* SECCIÓN DE CONTENIDO CONTACTO */
+        .contacto-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 50px;
+        }
+
+        .contacto-info {
+            background-color: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 30px;
+            box-shadow: var(--shadow);
+            border: 1px solid #fef0db;
+        }
+
+        .contacto-info h2 {
+            margin-top: 0;
+            color: #2c2c2c;
+            font-size: 1.8rem;
+            font-weight: 800;
+            border-bottom: 2px solid #ffe5b4;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            margin-bottom: 25px;
+            font-size: 1.1rem;
+            line-height: 1.5;
+        }
+
+        .info-item i {
+            color: var(--accent);
+            font-size: 1.4rem;
+            margin-top: 3px;
+            width: 25px;
+            text-align: center;
+        }
+
+        .info-item strong {
+            color: #2c2c2c;
+        }
+
+        /* BOTONES DE REDES SOCIALES Y CANALES */
+        .canales-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 30px;
+        }
+
+        .btn-canal {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 14px;
+            border-radius: 25px;
+            color: white;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.05rem;
+            transition: all 0.2s;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+
+        .btn-canal:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+        }
+
+        .btn-wa-1 { background-color: #25D366; }
+        .btn-wa-2 { background-color: #128C7E; }
+        .btn-messenger { background-color: #0084FF; }
+        .btn-telegram { background-color: #0088cc; }
+        .btn-wa-channel { background-color: #00a884; }
+        .btn-instagram { background-image: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); }
+
+        /* MAPA INTERACTIVO */
+        .mapa-container {
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            border: 2px solid #ffe5b4;
+            height: 100%;
+            min-height: 450px;
+        }
+
+        .mapa-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: block;
+        }
+
+        /* Footer */
+        footer { margin-top: auto; background-color: #fffaf0; border-top: 1px solid #ffe5b4; }
+        .footer-top {
+            max-width: 1200px; margin: 0 auto; padding: 50px 20px; display: flex;
+            justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 30px;
+        }
+        .footer-profile { display: flex; align-items: center; gap: 20px; max-width: 600px; }
+        .footer-avatar {
+            width: 85px; height: 85px; aspect-ratio: 1 / 1; border-radius: 50%;
+            object-fit: cover; border: 3px solid var(--accent); box-shadow: var(--shadow);
+        }
+        .footer-profile-info h4 { margin: 0 0 5px 0; font-size: 1.3rem; color: var(--text-main); font-weight: 700; }
+        .footer-profile-info p { margin: 0; color: var(--text-muted); font-size: 1rem; line-height: 1.5; }
+
+        .footer-socials { display: flex; gap: 12px; }
+        .footer-socials a {
+            display: flex; align-items: center; justify-content: center; width: 45px; height: 45px;
+            background: white; color: var(--accent); border-radius: 50%; text-decoration: none;
+            box-shadow: var(--shadow); font-size: 1.3rem; transition: 0.2s; border: 1px solid #ffe5b4;
+        }
+        .footer-socials a:hover { color: white; background: var(--accent); transform: translateY(-3px); }
+
+        .footer-bottom { border-top: 1px solid #ffe5b4; background: white; }
+        .footer-bottom-content { display: flex; justify-content: space-between; align-items: center; padding: 20px 0; }
+        .footer-bottom p { margin: 0; font-size: 0.9rem; color: var(--text-muted); font-weight: 500; }
+        .btn-up {
+            background-color: #fff3e0; color: var(--accent); border: none; width: 45px; height: 45px;
+            border-radius: 50%; cursor: pointer; font-size: 1.1rem; display: flex; align-items: center;
+            justify-content: center; transition: all 0.2s;
+        }
+        .btn-up:hover { background-color: var(--accent); color: white; }
+
+        /* Modales Listas Cart/Fav */
+        .list-item { display: flex; align-items: center; padding: 18px 0; border-bottom: 1px solid #f0f0f0; gap: 15px; }
+        .list-item-img { width: 70px; height: 70px; border-radius: 12px; object-fit: contain; background: #FFFFFF; border: 1px solid #eee; flex-shrink: 0; }
+        .list-item-info { flex-grow: 1; min-width: 0; }
+        .list-item-title { font-weight: 700; font-size:1.1rem; margin: 0 0 6px 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: #2c2c2c;}
+        .list-item-price { color: var(--accent); font-weight:600; font-size: 0.95rem; margin: 0; }
+        
+        .cart-controls { display: flex; align-items: center; gap: 12px; background: #fff9f0; border: 1px solid #ffe5b4; border-radius: 20px; padding: 6px 14px; flex-shrink: 0; }
+        .cart-controls button { background: none; border: none; font-size: 1.3rem; font-weight: bold; cursor: pointer; color: var(--accent); }
+        .list-item-total { font-weight: bold; font-size: 1.1rem; width: 90px; text-align: right; flex-shrink: 0; }
+        .list-item-remove { color: #ff3b30; cursor: pointer; font-size: 1.3rem; border: none; background: none; flex-shrink: 0; padding: 5px; }
+
+        .cart-shipping-option {
+            background: #fff9f0; border: 1px solid #ffe5b4; border-radius: 15px; padding: 15px; margin-top: 15px; display: flex; flex-direction: column; gap: 8px;
+        }
+        .shipping-toggle { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 1.05rem; cursor: pointer; color: #2c2c2c;}
+        .shipping-toggle input[type="checkbox"] { width: 22px; height: 22px; accent-color: var(--accent); cursor: pointer; }
+        .shipping-note { font-size: 0.88rem; color: var(--text-muted); line-height: 1.4; padding-left: 32px;}
+
+        .btn-whatsapp-cart {
+            background-color: #25D366; color: white; border: none; width: 100%; padding: 16px;
+            border-radius: 28px; font-size: 1.15rem; font-weight: 700; margin-top: 25px; cursor: pointer;
+            display: flex; justify-content: center; align-items: center; gap: 10px; box-shadow: 0 5px 15px rgba(37,211,102,0.3);
+        }
+
+        @media (max-width: 1024px) {
+            #logo-text, #btn-wa, #btn-ig { display: none; }
+        }
+
+        @media (max-width: 768px) {
+            .contacto-layout { grid-template-columns: 1fr; gap: 25px; }
+            .mapa-container { min-height: 350px; }
+            .hero { min-height: 220px; }
+            .hero-title { font-size: 2.5rem; }
+            .footer-top, .footer-profile, .footer-bottom-content { flex-direction: column; text-align: center; }
+            .shipping-note { padding-left: 0; margin-top: 5px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="contenedor header-content">
+            <div class="logo-container" onclick="window.location.href='index.html'">
+                <i class="fa-solid fa-paw logo-icon"></i>
+                <span id="logo-text">FoodCan</span>
+            </div>
+
+            <div class="header-actions">
+                <button class="btn-icon btn-icon-fav" id="btn-fav-header" onclick="abrirFavoritos()">
+                    <i class="fa-solid fa-heart"></i>
+                    <span class="badge" id="fav-badge" style="display:none;">0</span>
+                </button>
+                <button class="btn-icon" id="btn-wa" onclick="window.open('https://wa.me/593983488809', '_blank')">
+                    <i class="fa-brands fa-whatsapp"></i>
+                </button>
+                <button class="btn-icon" id="btn-ig" onclick="window.open('https://instagram.com', '_blank')">
+                    <i class="fa-brands fa-instagram"></i>
+                </button>
+                <button class="btn-icon" id="btn-carrito" onclick="abrirCarrito()">
+                    <i class="fa-solid fa-basket-shopping"></i>
+                    <span class="badge" id="cart-badge">0</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <section class="hero" id="hero-section">
+        <video class="hero-video" src="https://cdn.pixabay.com/video/2024/07/24/222837_large.mp4" autoplay loop muted playsinline></video>
+        <div class="hero-content">
+            <h1 class="hero-title">Contacto</h1>
+            <p class="hero-subtitle">Estamos listos para ayudarte a cuidar de tu peludito.</p>
+        </div>
+    </section>
+
+    <div class="contenedor">
+        <div class="contacto-layout">
+            
+            <div class="contacto-info">
+                <h2>Nuestra Ubicación</h2>
+                
+                <div class="info-item">
+                    <i class="fa-solid fa-location-dot"></i>
+                    <div>
+                        <strong>Dirección:</strong><br>
+                        Av. Bobonaza E5-172 y Miguel de Trujillo.<br>
+                        Quito, Pichincha.
+                    </div>
+                </div>
+
+                <div class="info-item">
+                    <i class="fa-solid fa-clock"></i>
+                    <div>
+                        <strong>Horarios de Atención:</strong><br>
+                        Lunes a Sábado: Coordinación directa para entregas y retiros.
+                    </div>
+                </div>
+
+                <h2>Canales de Atención Directa</h2>
+                <p style="color: var(--text-muted); margin-bottom: 20px;">Escríbenos o únete a nuestras comunidades para recibir ofertas exclusivas:</p>
+
+                <div class="canales-container">
+                    <a href="https://wa.me/593983488809" target="_blank" class="btn-canal btn-wa-1">
+                        <i class="fa-brands fa-whatsapp"></i> Chatear WhatsApp Principal
+                    </a>
+                    <a href="https://wa.me/593962923944" target="_blank" class="btn-canal btn-wa-2">
+                        <i class="fa-brands fa-whatsapp"></i> Chatear WhatsApp Secundario
+                    </a>
+                    <a href="https://m.me/torgaddon" target="_blank" class="btn-canal btn-messenger">
+                        <i class="fa-brands fa-facebook-messenger"></i> Chat Facebook Messenger
+                    </a>
+                    <a href="https://t.me/foodcan" target="_blank" class="btn-canal btn-telegram">
+                        <i class="fa-brands fa-telegram"></i> Unirse al Canal de Telegram
+                    </a>
+                    <a href="https://whatsapp.com/channel/0029VbCVRy5L7UVXLD3xtx03" target="_blank" class="btn-canal btn-wa-channel">
+                        <i class="fa-solid fa-bullhorn"></i> Canal de Ofertas WhatsApp
+                    </a>
+                    <a href="https://instagram.com" target="_blank" class="btn-canal btn-instagram">
+                        <i class="fa-brands fa-instagram"></i> Síguenos en Instagram
+                    </a>
+                </div>
+            </div>
+
+            <div class="mapa-container">
+                <iframe 
+                    src="https://maps.google.com/maps?q=Av.%20Bobonaza%20E5-172%20y%20Miguel%20de%20Trujillo,%20Quito&t=&z=16&ie=UTF8&iwloc=&output=embed" 
+                    allowfullscreen="" 
+                    loading="lazy" 
+                    referrerpolicy="no-referrer-when-downgrade">
+                </iframe>
+            </div>
+
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-top" id="footer-top-section">
+            <div class="footer-profile" id="footer-profile-section">
+                <img src="https://blogger.googleusercontent.com/img/a/AVvXsEgXikXKwqnAgd0i1b4scX8MXs03ENFHa4M3CTYHFj4mIgnUstWGEo1Nz78s6PQkBgpKhDeI9q7rBBC62ROfVO-a8QnGk_aoYnW2WD9Gzc5TopONYV_KqAUPBDCOVBr3BiKyNjm9R8Lc60qeUor_fNZueeveTZ6T6C1NngVQo-vPIFpglMMsiN3Ute2iqh4" alt="César Aguilar" class="footer-avatar" loading="lazy">
+                <div class="footer-profile-info">
+                    <h4>Raquel Espinoza</h4>
+                    <p>Mi pasión es brindar lo mejor para tu mascota,</p><p> con productos de la más alta calidad.</p>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="contenedor footer-bottom-content">
+                <p>© FoodCan All Rights Reserved. 2026 Creado por César Aguilar</p>
+                <button class="btn-up" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+                    <i class="fa-solid fa-chevron-up"></i>
+                </button>
+            </div>
+        </div>
+    </footer>
+
+    <div id="modal-carrito" class="modal-overlay" onclick="cerrarModal(event, 'modal-carrito')">
+        <div class="modal-content" style="max-width: 650px;">
+            <button class="btn-cerrar" onclick="cerrarModalForce('modal-carrito')"><i class="fa-solid fa-xmark"></i></button>
+            <h2 style="margin-top:0; color: #2c2c2c;"><i class="fa-solid fa-basket-shopping" style="color: var(--accent); margin-right: 10px;"></i> Tu Carrito</h2>
+            <div id="cart-items-container"></div>
+            
+            <div class="cart-shipping-option" id="cart-shipping-container" style="display:none;">
+                <label class="shipping-toggle">
+                    <input type="checkbox" id="check-envio-uber" onchange="actualizarTotalCarrito()">
+                    Solicitar envío a domicilio
+                </label>
+                <div class="shipping-note">
+                    <strong>Desactivado:</strong> Retiras en el local (Costo $0.00).<br>
+                    <strong>Activado:</strong> El costo del transporte lo coordinaremos y revisaremos directamente contigo vía WhatsApp según tu ubicación, día y horario. ¡No pagas ningún valor adicional en la web!
+                </div>
+            </div>
+
+            <div style="margin-top: 20px; text-align: right; padding-top: 15px; border-top: 2px dashed #ffe5b4;">
+                <h3 style="margin-bottom: 5px; color: #555; font-size: 1.1rem; font-weight: 500;">Subtotal: $<span id="cart-subtotal">0.00</span></h3>
+                <h3 id="cart-shipping-line" style="margin-bottom: 5px; color: #333; font-size: 1.1rem; font-weight: 700; display:none;">Envío: <span style="color: var(--accent);">Por coordinar vía WhatsApp</span></h3>
+                <h3 style="margin-bottom: 0; color: #2c2c2c; font-size: 1.5rem; margin-top: 10px;">Total a pagar: $<span id="cart-total" style="color: var(--accent);">0.00</span></h3>
+            </div>
+            <button class="btn-whatsapp-cart" onclick="enviarPedido()">
+                <i class="fa-brands fa-whatsapp" style="font-size: 1.4rem;"></i> Enviar Pedido por WhatsApp
+            </button>
+        </div>
+    </div>
+
+    <div id="modal-favoritos" class="modal-overlay" onclick="cerrarModal(event, 'modal-favoritos')">
+        <div class="modal-content" style="max-width: 650px;">
+            <button class="btn-cerrar" onclick="cerrarModalForce('modal-favoritos')"><i class="fa-solid fa-xmark"></i></button>
+            <h2 style="margin-top:0; color: #2c2c2c;"><i class="fa-solid fa-heart" style="color: #ff3b30; margin-right: 10px;"></i> Tus Favoritos</h2>
+            <div id="fav-items-container"></div>
+        </div>
+    </div>
+
+    <script>
+        let carrito = JSON.parse(localStorage.getItem('foodcan_carrito')) || [];
+        let favoritos = JSON.parse(localStorage.getItem('foodcan_favoritos')) || [];
+
+        window.onload = () => {
+            actualizarIconoCarrito();
+            actualizarIconoFavoritos();
+        };
+
+        function guardarDatosLocales() {
+            localStorage.setItem('foodcan_carrito', JSON.stringify(carrito));
+            localStorage.setItem('foodcan_favoritos', JSON.stringify(favoritos));
+        }
+
+        function actualizarIconoCarrito() {
+            const badge = document.getElementById("cart-badge");
+            const totalItems = carrito.reduce((sum, item) => sum + item.cantidad, 0);
+            if (totalItems > 0) { badge.style.display = "flex"; badge.textContent = totalItems; } 
+            else { badge.style.display = "none"; }
+        }
+
+        function actualizarIconoFavoritos() {
+            const badge = document.getElementById("fav-badge");
+            if (favoritos.length > 0) { badge.style.display = "flex"; badge.textContent = favoritos.length; } 
+            else { badge.style.display = "none"; }
+        }
+
+        function abrirCarrito() {
+            renderizarCarrito();
+            document.getElementById("modal-carrito").classList.add("activo");
+        }
+
+        function abrirFavoritos() {
+            renderizarFavoritos();
+            document.getElementById("modal-favoritos").classList.add("activo");
+        }
+
+        function renderizarCarrito() {
+            const container = document.getElementById("cart-items-container");
+            const shippingContainer = document.getElementById("cart-shipping-container");
+            container.innerHTML = "";
+            let subtotal = 0;
+
+            if (carrito.length === 0) {
+                container.innerHTML = "<p style='text-align:center; color:gray; margin-top:20px;'>Tu carrito está vacío</p>";
+                document.getElementById("cart-subtotal").textContent = "0.00";
+                document.getElementById("cart-total").textContent = "0.00";
+                shippingContainer.style.display = "none";
+                document.getElementById("cart-shipping-line").style.display = "none";
+                return;
+            }
+
+            shippingContainer.style.display = "flex";
+
+            carrito.forEach(item => {
+                const totalItem = item.venta * item.cantidad;
+                subtotal += totalItem;
+
+                container.innerHTML += `
+                    <div class="list-item">
+                        <img src="${item.img}" class="list-item-img" oncontextmenu="return false;" draggable="false">
+                        <div class="list-item-info">
+                            <h4 class="list-item-title" title="${item.nombre}">${item.nombre}</h4>
+                            <p class="list-item-price">$${item.venta.toFixed(2)} c/u</p>
+                        </div>
+                        <div class="cart-controls">
+                            <button onclick="cambiarCantidad(${item.id}, -1)"><i class="fa-solid fa-minus" style="font-size:0.9rem;"></i></button>
+                            <span>${item.cantidad}</span>
+                            <button onclick="cambiarCantidad(${item.id}, 1)"><i class="fa-solid fa-plus" style="font-size:0.9rem;"></i></button>
+                        </div>
+                        <div class="list-item-total">$${totalItem.toFixed(2)}</div>
+                        <button class="list-item-remove" onclick="eliminarDelCarrito(${item.id})"><i class="fa-solid fa-trash-can"></i></button>
+                    </div>
+                `;
+            });
+
+            actualizarTotalCarrito(subtotal);
+        }
+
+        function cambiarCantidad(id, cambio) {
+            const item = carrito.find(i => i.id === id);
+            if (item) {
+                item.cantidad += cambio;
+                if (item.cantidad <= 0) eliminarDelCarrito(id);
+                else { 
+                    guardarDatosLocales();
+                    renderizarCarrito(); 
+                    actualizarIconoCarrito(); 
+                }
+            }
+        }
+
+        function eliminarDelCarrito(id) {
+            carrito = carrito.filter(i => i.id !== id);
+            guardarDatosLocales();
+            renderizarCarrito();
+            actualizarIconoCarrito();
+        }
+
+        function actualizarTotalCarrito(subtotalParam) {
+            let subtotal = subtotalParam !== undefined ? subtotalParam : carrito.reduce((sum, item) => sum + (item.venta * item.cantidad), 0);
+            const usaUber = document.getElementById("check-envio-uber").checked;
+            
+            document.getElementById("cart-subtotal").textContent = subtotal.toFixed(2);
+            document.getElementById("cart-shipping-line").style.display = usaUber ? "block" : "none";
+            document.getElementById("cart-total").textContent = subtotal.toFixed(2);
+        }
+
+        function renderizarFavoritos() {
+            const container = document.getElementById("fav-items-container");
+            container.innerHTML = "";
+            if (favoritos.length === 0) {
+                container.innerHTML = "<p style='text-align:center; color:gray;'>Aún no tienes productos favoritos.</p>";
+                return;
+            }
+            container.innerHTML = "<p style='text-align:center; color:gray; padding: 20px;'>Navega a la tienda principal para gestionar tus productos favoritos de forma completa.</p>";
+        }
+
+        function cerrarModal(e, id) { if (e.target.id === id) cerrarModalForce(id); }
+        function cerrarModalForce(id) { document.getElementById(id).classList.remove("activo"); }
+
+        function enviarPedido() {
+            if (carrito.length === 0) return;
+
+            let subtotal = 0;
+            let mensaje = "Hola, me gustaría realizar el siguiente pedido para mi mascota (Desde pág. Contacto):%0A%0A";
+
+            carrito.forEach(item => {
+                const totalItem = item.venta * item.cantidad;
+                subtotal += totalItem;
+                mensaje += `- ${item.cantidad} unidad(es) de ${item.nombre} ($${totalItem.toFixed(2)})%0A`;
+            });
+
+            const usaUber = document.getElementById("check-envio-uber").checked;
+
+            mensaje += `%0A*Subtotal:* $${subtotal.toFixed(2)}`;
+            if (usaUber) {
+                mensaje += `%0A*Envío:* Por coordinar vía WhatsApp (Se revisará según ubicación y horario)`;
+                mensaje += `%0A*Entrega:* Solicito envío a domicilio`;
+            } else {
+                mensaje += `%0A*Entrega:* Pasará retirando por el local`;
+            }
+            mensaje += `%0A%0A*TOTAL A PAGAR (Productos):* $${subtotal.toFixed(2)}`;
+
+            window.open(`https://wa.me/${TELEFONO}?text=${mensaje}`, '_blank');
+        }
+    </script>
+</body>
+</html>
