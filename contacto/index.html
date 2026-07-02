@@ -171,7 +171,7 @@
             display: flex;
             flex-direction: column;
             gap: 12px;
-            margin-top: 30px;
+            margin-top: 10px;
         }
 
         .btn-canal {
@@ -194,11 +194,21 @@
             box-shadow: 0 6px 15px rgba(0,0,0,0.1);
         }
 
+        .separador-canales {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--accent);
+            margin: 15px 0 5px 0;
+            text-align: center;
+            border-bottom: 2px dotted #ffe5b4;
+            padding-bottom: 8px;
+        }
+
         .btn-wa-1 { background-color: #25D366; }
-        .btn-wa-2 { background-color: #128C7E; }
         .btn-messenger { background-color: #0084FF; }
         .btn-telegram { background-color: #0088cc; }
         .btn-wa-channel { background-color: #00a884; }
+        .btn-facebook { background-color: #1877F2; }
         .btn-instagram { background-image: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); }
 
         /* MAPA INTERACTIVO */
@@ -250,6 +260,27 @@
         }
         .btn-up:hover { background-color: var(--accent); color: white; }
 
+        /* MODALES CSS (ESTO FALTABA PARA QUE FLOTEN) */
+        .modal-overlay {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6); backdrop-filter: blur(5px); z-index: 1000;
+            justify-content: center; align-items: center; opacity: 0; transition: opacity 0.3s ease;
+        }
+        .modal-overlay.activo { display: flex; opacity: 1; }
+        
+        .modal-content {
+            background: var(--card-bg); border-radius: 24px; width: 90%; max-width: 850px;
+            max-height: 90vh; overflow-y: auto; position: relative; box-shadow: 0 25px 50px rgba(0,0,0,0.2);
+            padding: 35px; box-sizing: border-box; border: 2px solid #ffe5b4;
+        }
+        
+        .btn-cerrar {
+            position: absolute; top: 20px; right: 20px; background: #fff3e0; border: none; color: var(--accent);
+            width: 35px; height: 35px; border-radius: 50%; font-size: 1.3rem; cursor: pointer;
+            display: flex; align-items: center; justify-content: center; z-index: 10; transition: 0.2s;
+        }
+        .btn-cerrar:hover { background: var(--accent); color: white; }
+
         /* Modales Listas Cart/Fav */
         .list-item { display: flex; align-items: center; padding: 18px 0; border-bottom: 1px solid #f0f0f0; gap: 15px; }
         .list-item-img { width: 70px; height: 70px; border-radius: 12px; object-fit: contain; background: #FFFFFF; border: 1px solid #eee; flex-shrink: 0; }
@@ -260,7 +291,8 @@
         .cart-controls { display: flex; align-items: center; gap: 12px; background: #fff9f0; border: 1px solid #ffe5b4; border-radius: 20px; padding: 6px 14px; flex-shrink: 0; }
         .cart-controls button { background: none; border: none; font-size: 1.3rem; font-weight: bold; cursor: pointer; color: var(--accent); }
         .list-item-total { font-weight: bold; font-size: 1.1rem; width: 90px; text-align: right; flex-shrink: 0; }
-        .list-item-remove { color: #ff3b30; cursor: pointer; font-size: 1.3rem; border: none; background: none; flex-shrink: 0; padding: 5px; }
+        .list-item-remove { color: #ff3b30; cursor: pointer; font-size: 1.3rem; border: none; background: none; flex-shrink: 0; padding: 5px; cursor: pointer; transition: 0.2s;}
+        .list-item-remove:hover { transform: scale(1.2); }
 
         .cart-shipping-option {
             background: #fff9f0; border: 1px solid #ffe5b4; border-radius: 15px; padding: 15px; margin-top: 15px; display: flex; flex-direction: column; gap: 8px;
@@ -273,7 +305,9 @@
             background-color: #25D366; color: white; border: none; width: 100%; padding: 16px;
             border-radius: 28px; font-size: 1.15rem; font-weight: 700; margin-top: 25px; cursor: pointer;
             display: flex; justify-content: center; align-items: center; gap: 10px; box-shadow: 0 5px 15px rgba(37,211,102,0.3);
+            transition: all 0.2s;
         }
+        .btn-whatsapp-cart:hover { background-color: #20bd5a; transform: translateY(-2px); }
 
         @media (max-width: 1024px) {
             #logo-text, #btn-wa, #btn-ig { display: none; }
@@ -293,7 +327,7 @@
 
     <header>
         <div class="contenedor header-content">
-            <div class="logo-container" onclick="window.location.href='index.html'">
+            <div class="logo-container" onclick="window.location.href='https://foodcan.cc'">
                 <i class="fa-solid fa-paw logo-icon"></i>
                 <span id="logo-text">FoodCan</span>
             </div>
@@ -349,23 +383,29 @@
                 </div>
 
                 <h2>Canales de Atención Directa</h2>
-                <p style="color: var(--text-muted); margin-bottom: 20px;">Escríbenos o únete a nuestras comunidades para recibir ofertas exclusivas:</p>
+                <p style="color: var(--text-muted); margin-bottom: 10px;">Escríbenos directamente o interactúa con nosotros:</p>
 
                 <div class="canales-container">
                     <a href="https://wa.me/593983488809" target="_blank" class="btn-canal btn-wa-1">
                         <i class="fa-brands fa-whatsapp"></i> Chatear WhatsApp Principal
                     </a>
-                    <a href="https://wa.me/593962923944" target="_blank" class="btn-canal btn-wa-2">
-                        <i class="fa-brands fa-whatsapp"></i> Chatear WhatsApp Secundario
-                    </a>
                     <a href="https://m.me/torgaddon" target="_blank" class="btn-canal btn-messenger">
                         <i class="fa-brands fa-facebook-messenger"></i> Chat Facebook Messenger
                     </a>
+
+                    <div class="separador-canales">Canales de novedades y ofertas</div>
+
                     <a href="https://t.me/foodcan" target="_blank" class="btn-canal btn-telegram">
                         <i class="fa-brands fa-telegram"></i> Unirse al Canal de Telegram
                     </a>
                     <a href="https://whatsapp.com/channel/0029VbCVRy5L7UVXLD3xtx03" target="_blank" class="btn-canal btn-wa-channel">
                         <i class="fa-solid fa-bullhorn"></i> Canal de Ofertas WhatsApp
+                    </a>
+
+                    <div class="separador-canales">Redes Sociales</div>
+
+                    <a href="#" target="_blank" class="btn-canal btn-facebook">
+                        <i class="fa-brands fa-facebook-f"></i> Síguenos en Facebook
                     </a>
                     <a href="https://instagram.com" target="_blank" class="btn-canal btn-instagram">
                         <i class="fa-brands fa-instagram"></i> Síguenos en Instagram
@@ -375,7 +415,7 @@
 
             <div class="mapa-container">
                 <iframe 
-                    src="https://maps.google.com/maps?q=Av.%20Bobonaza%20E5-172%20y%20Miguel%20de%20Trujillo,%20Quito&t=&z=16&ie=UTF8&iwloc=&output=embed" 
+                    src="https://maps.app.goo.gl/2BLXgt1dfAo28kUr8" 
                     allowfullscreen="" 
                     loading="lazy" 
                     referrerpolicy="no-referrer-when-downgrade">
@@ -388,7 +428,7 @@
     <footer>
         <div class="footer-top" id="footer-top-section">
             <div class="footer-profile" id="footer-profile-section">
-                <img src="https://blogger.googleusercontent.com/img/a/AVvXsEgXikXKwqnAgd0i1b4scX8MXs03ENFHa4M3CTYHFj4mIgnUstWGEo1Nz78s6PQkBgpKhDeI9q7rBBC62ROfVO-a8QnGk_aoYnW2WD9Gzc5TopONYV_KqAUPBDCOVBr3BiKyNjm9R8Lc60qeUor_fNZueeveTZ6T6C1NngVQo-vPIFpglMMsiN3Ute2iqh4" alt="César Aguilar" class="footer-avatar" loading="lazy">
+                <img src="https://blogger.googleusercontent.com/img/a/AVvXsEgXikXKwqnAgd0i1b4scX8MXs03ENFHa4M3CTYHFj4mIgnUstWGEo1Nz78s6PQkBgpKhDeI9q7rBBC62ROfVO-a8QnGk_aoYnW2WD9Gzc5TopONYV_KqAUPBDCOVBr3BiKyNjm9R8Lc60qeUor_fNZueeveTZ6T6C1NngVQo-vPIFpglMMsiN3Ute2iqh4" alt="Raquel Espinoza" class="footer-avatar" loading="lazy">
                 <div class="footer-profile-info">
                     <h4>Raquel Espinoza</h4>
                     <p>Mi pasión es brindar lo mejor para tu mascota,</p><p> con productos de la más alta calidad.</p>
@@ -442,6 +482,7 @@
     </div>
 
     <script>
+        const TELEFONO = "593983488809";
         let carrito = JSON.parse(localStorage.getItem('foodcan_carrito')) || [];
         let favoritos = JSON.parse(localStorage.getItem('foodcan_favoritos')) || [];
 
@@ -556,7 +597,7 @@
                 container.innerHTML = "<p style='text-align:center; color:gray;'>Aún no tienes productos favoritos.</p>";
                 return;
             }
-            container.innerHTML = "<p style='text-align:center; color:gray; padding: 20px;'>Navega a la tienda principal para gestionar tus productos favoritos de forma completa.</p>";
+            container.innerHTML = "<p style='text-align:center; color:gray; padding: 20px;'>Navega a la <a href='https://foodcan.cc' style='color: var(--accent); font-weight: bold;'>tienda principal</a> para gestionar y ver tus productos favoritos de forma completa.</p>";
         }
 
         function cerrarModal(e, id) { if (e.target.id === id) cerrarModalForce(id); }
