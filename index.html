@@ -574,7 +574,6 @@
         <div class="grid-productos" id="galeria"></div>
 
         <div class="contenedor-ver-mas" id="cont-ver-mas" style="display:none;">
-            <!-- SE AGREGA type="button" PARA EVITAR RECARGAS ACCIDENTALES -->
             <button type="button" class="btn-ver-mas" onclick="cargarMas()">Ver más productos...</button>
         </div>
     </div>
@@ -694,6 +693,7 @@
 
         let baseDatos = [];
         let limiteMostrado = 16;
+        let indexActual = 0; // NUEVO: Evita recargar productos viejos
         let productosFiltrados = [];
         let sliderImages = [];
         
@@ -712,7 +712,8 @@
                 .replace(/(^-|-$)+/g, '');
         }
 
-        window.onload = () => {
+        // CARGA INSTANTÁNEA EN LUGAR DE ESPERAR EL VIDEO
+        document.addEventListener("DOMContentLoaded", () => {
             if (!MOSTRAR_HERO) document.getElementById('hero-section').style.display = 'none';
             if (!MOSTRAR_FOOTER_TOP) document.getElementById('footer-top-section').style.display = 'none';
             if (!MOSTRAR_PERFIL_FOOTER) document.getElementById('footer-profile-section').style.display = 'none';
@@ -744,7 +745,7 @@
             Papa.parse(SHEET_URL, {
                 download: true,
                 header: true,
-                skipEmptyLines: 'greedy', // EVITA QUE SE ROMPA SI HAY FILAS VACÍAS
+                skipEmptyLines: 'greedy', 
                 complete: function(results) {
                     document.getElementById('mensaje-carga').style.display = 'none';
                     document.getElementById('barra-herramientas').style.display = 'flex';
@@ -807,7 +808,7 @@
                     document.getElementById('mensaje-carga').innerHTML = "<p style='color:red;'>Error al conectar con la base de datos.</p>";
                 }
             });
-        };
+        });
 
         function toggleMobileSearch(estado) {
             const wrapper = document.getElementById('search-wrapper');
@@ -926,17 +927,23 @@
 
             productosFiltrados = resultado;
             limiteMostrado = 16;
-            renderizarProductos(productosFiltrados);
+            indexActual = 0; // REINICIA EL ÍNDICE AL FILTRAR
+            document.getElementById("galeria").innerHTML = ""; // SOLO LIMPIA AL FILTRAR, NO AL CARGAR MÁS
+            renderizarProductos();
         }
 
-        function renderizarProductos(productos) {
+        // FUNCIÓN OPTIMIZADA: ACUMULA HTML Y LO INYECTA
+        function renderizarProductos() {
             const contenedor = document.getElementById("galeria");
-            contenedor.innerHTML = "";
-            const productosAMostrar = productos.slice(0, limiteMostrado);
 
-            if(productosAMostrar.length === 0) {
+            if(productosFiltrados.length === 0) {
                 contenedor.innerHTML = "<p style='grid-column: 1/-1; text-align: center; color: gray;'>No se encontraron productos en FoodCan.</p>";
+                document.getElementById("cont-ver-mas").style.display = "none";
+                return;
             }
+
+            const productosAMostrar = productosFiltrados.slice(indexActual, limiteMostrado);
+            let htmlContent = ""; // Acumulador para rendimiento
 
             productosAMostrar.forEach(p => {
                 const primeraImg = p.imgArray[0];
@@ -949,7 +956,8 @@
                 
                 const pesoHtml = p.peso ? `<p class="card-peso">${p.peso}</p>` : '';
 
-                contenedor.innerHTML += `
+                // ID AGREGADO AL BOTÓN FAV PARA MANEJARLO DIRECTAMENTE
+                htmlContent += `
                     <div class="card-producto" onclick="abrirProducto(${p.id})">
                         <div class="card-img-container">
                             <img src="${primeraImg}" alt="${p.producto}" loading="lazy" decoding="async" onload="this.classList.add('loaded')" oncontextmenu="return false;" draggable="false">
@@ -961,31 +969,39 @@
                         </div>
                         <div class="card-actions">
                             ${btnHtml}
-                            <button class="btn-fav ${esFav}" onclick="event.stopPropagation(); toggleCorazon(${p.id}, this)"><i class="fa-solid fa-heart"></i></button>
+                            <button id="fav-btn-${p.id}" class="btn-fav ${esFav}" onclick="event.stopPropagation(); toggleCorazon(${p.id})"><i class="fa-solid fa-heart"></i></button>
                         </div>
                     </div>
                 `;
             });
 
+            // INYECTA AL FINAL SIN BORRAR LO ANTERIOR (Elimina el parpadeo y la lentitud)
+            contenedor.insertAdjacentHTML('beforeend', htmlContent);
+            indexActual = limiteMostrado; // Actualiza el punto donde nos quedamos
+
             const btnVerMas = document.getElementById("cont-ver-mas");
-            if (productos.length > limiteMostrado) btnVerMas.style.display = "flex";
+            if (productosFiltrados.length > indexActual) btnVerMas.style.display = "flex";
             else btnVerMas.style.display = "none";
         }
 
         function cargarMas() { 
             limiteMostrado += 16; 
-            renderizarProductos(productosFiltrados); 
+            renderizarProductos(); 
         }
 
-        function toggleCorazon(id, btnElement) {
+        // TOGGLE OPTIMIZADO PARA NO RECARGAR LA GALERÍA
+        function toggleCorazon(id) {
             const index = favoritos.indexOf(id);
+            const btnEnGaleria = document.getElementById(`fav-btn-${id}`);
+            
             if (index === -1) {
                 favoritos.push(id);
-                if(btnElement) btnElement.classList.add('activo');
+                if(btnEnGaleria) btnEnGaleria.classList.add('activo');
             } else {
                 favoritos.splice(index, 1);
-                if(btnElement) btnElement.classList.remove('activo');
+                if(btnEnGaleria) btnEnGaleria.classList.remove('activo');
             }
+            
             guardarDatosLocales();
             actualizarIconoFavoritos();
             if(document.getElementById("modal-favoritos").classList.contains("activo")) renderizarFavoritos();
@@ -1010,11 +1026,12 @@
 
         function renderizarFavoritos() {
             const container = document.getElementById("fav-items-container");
-            container.innerHTML = "";
             if (favoritos.length === 0) {
                 container.innerHTML = "<p style='text-align:center; color:gray;'>Aún no tienes productos favoritos.</p>";
                 return;
             }
+
+            let htmlContent = "";
             favoritos.forEach(id => {
                 const p = baseDatos.find(x => x.id === id);
                 if(!p) return;
@@ -1025,7 +1042,7 @@
                     ? `<button class="btn-agregar btn-agotado" style="width: 120px; padding: 10px 15px; flex-grow: 0; flex-shrink: 0;" disabled>Agotado</button>`
                     : `<button class="btn-agregar" style="width: 120px; padding: 10px 15px; flex-grow: 0; flex-shrink: 0;" onclick="agregarAlCarrito(${p.id})">Añadir</button>`;
 
-                container.innerHTML += `
+                htmlContent += `
                     <div class="list-item">
                         <img src="${primeraImg}" class="list-item-img" loading="lazy" onclick="cerrarModalForce('modal-favoritos'); abrirProducto(${p.id})" oncontextmenu="return false;" draggable="false">
                         <div class="list-item-info" onclick="cerrarModalForce('modal-favoritos'); abrirProducto(${p.id})">
@@ -1033,10 +1050,11 @@
                             <p class="list-item-price">$${p.venta.toFixed(2)}</p>
                         </div>
                         ${btnHtml}
-                        <button class="list-item-remove" onclick="toggleCorazon(${p.id}, null); renderizarFavoritos(); renderizarProductos(productosFiltrados);"><i class="fa-solid fa-trash-can"></i></button>
+                        <button class="list-item-remove" onclick="toggleCorazon(${p.id})"><i class="fa-solid fa-trash-can"></i></button>
                     </div>
                 `;
             });
+            container.innerHTML = htmlContent; // Asignación masiva directa
         }
 
         function abrirProducto(id) {
@@ -1045,7 +1063,6 @@
             document.getElementById("modal-titulo").textContent = p.producto;
             document.getElementById("modal-precio").textContent = `$${p.venta.toFixed(2)}`;
             
-            // LEYENDO LOS SALTOS DE LÍNEA EN LA DESCRIPCIÓN
             document.getElementById("modal-desc").innerHTML = p.descripcion ? p.descripcion.replace(/\n/g, '<br>') : "Sin descripción.";
 
             const txtPeso = document.getElementById("modal-peso");
@@ -1053,13 +1070,14 @@
             else { txtPeso.style.display = "none"; }
 
             const catDiv = document.getElementById("modal-categorias");
-            catDiv.innerHTML = "";
+            let catHtml = "";
             if(p.categoria) {
                 p.categoria.split(',').forEach(c => {
                     let catTrim = c.trim();
-                    if(catTrim) catDiv.innerHTML += `<span class="cat-pill" onclick="filtrarPorCategoriaPopUp('${catTrim}')">${catTrim}</span>`;
+                    if(catTrim) catHtml += `<span class="cat-pill" onclick="filtrarPorCategoriaPopUp('${catTrim}')">${catTrim}</span>`;
                 });
             }
+            catDiv.innerHTML = catHtml;
 
             const btnModal = document.getElementById("btn-modal-agregar");
             if (p.estado === 'agotado') {
@@ -1187,7 +1205,7 @@
         function renderizarCarrito() {
             const container = document.getElementById("cart-items-container");
             const shippingContainer = document.getElementById("cart-shipping-container");
-            container.innerHTML = "";
+            
             let subtotal = 0;
 
             if (carrito.length === 0) {
@@ -1200,12 +1218,13 @@
             }
 
             shippingContainer.style.display = "flex";
+            let htmlContent = "";
 
             carrito.forEach(item => {
                 const totalItem = item.venta * item.cantidad;
                 subtotal += totalItem;
 
-                container.innerHTML += `
+                htmlContent += `
                     <div class="list-item">
                         <img src="${item.img}" class="list-item-img" loading="lazy" onclick="cerrarModalForce('modal-carrito'); abrirProducto(${item.id})" oncontextmenu="return false;" draggable="false">
                         <div class="list-item-info" onclick="cerrarModalForce('modal-carrito'); abrirProducto(${item.id})">
@@ -1222,7 +1241,8 @@
                     </div>
                 `;
             });
-
+            
+            container.innerHTML = htmlContent;
             actualizarTotalCarrito(subtotal);
         }
 
